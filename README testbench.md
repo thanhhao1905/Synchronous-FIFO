@@ -1,4 +1,3 @@
-````verilog
 `timescale 1ns/1ps
 module tb_fifo_sync_rst_n;
   parameter Depth =8 , Width =8;
@@ -96,9 +95,8 @@ module tb_fifo_sync_rst_n;
   //test_empty_condition
   task test_empty_condition ();
     $display ("---- Test Empty Condition ----");
-    @(posedge clk);
     rst_n <= 0;
-    @(posedge clk);
+    repeat(2) @(posedge clk);
     rst_n <= 1;
     
     for(i=0; i<Depth; i=i+1) begin
@@ -112,7 +110,7 @@ module tb_fifo_sync_rst_n;
   
   //test_wrap_around
   task test_wrap_around ();
-    $display ("---- Test Warp Around ----");
+    $display ("---- Test Wrap Around ----");
     for(i=0; i<Depth; i=i+1) begin
       @(posedge clk);
       w_en <= 1;
@@ -135,22 +133,27 @@ module tb_fifo_sync_rst_n;
       @(posedge clk);
       w_en <= 0;
     end
-    $display ("---- Finish Test Warp Around ----");
+    $display ("---- Finish Test Wrap Around ----");
   endtask
   
   //random test
   task random_test ();
-    @(posedge clk);
-    rst_n <= 0;
-    @(posedge clk);
-    rst_n <= 1;
+    integer n;
     
-    for(i=0; i< ($urandom % (2**Depth)); i=i+1) begin
+    rst_n <= 0;
+    repeat(2) @(posedge clk);
+    rst_n <= 1;
+    n = $urandom % Depth;
+    
+    for(i=0; i< n ; i=i+1) begin
       @(posedge clk);
       w_en <= 1;
       data_in <= $urandom % (2**Width);
       @(posedge clk);
       w_en <= 0;
+    end
+    
+    for(i=0; i<n ; i=i+1) begin
       @(posedge clk);
       r_en <= 1;
       @(posedge clk);
