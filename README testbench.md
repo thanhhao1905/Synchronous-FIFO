@@ -139,8 +139,8 @@ module tb_fifo_sync_rst_n;
   
   //random test
   task random_test ();
+    $display ("---- Random Test ----");
     integer n;
-    
     rst_n <= 0;
     repeat(2) @(posedge clk);
     rst_n <= 1;
