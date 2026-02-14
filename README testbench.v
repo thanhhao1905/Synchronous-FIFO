@@ -1,4 +1,4 @@
-````verilog
+
 `timescale 1ns/1ps
 module tb_fifo_sync_rst_n;
   parameter Depth =8 , Width =8;
