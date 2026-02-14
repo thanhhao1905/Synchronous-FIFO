@@ -1,4 +1,4 @@
-````verilog
+
 module fifo_sync_rst_n #(parameter Depth =8 , Width =8) (input wire clk ,rst_n ,w_en ,r_en,
                                                          input wire [Width-1 :0] data_in,
                                                          output reg [Width-1 :0] data_out,
